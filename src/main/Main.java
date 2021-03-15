@@ -6,7 +6,7 @@ public class Main {
 		
 		int nItens;
 		Item itens[];
-		int capMochila;
+		double capMochila;
 		
 		nItens = 5;
 //		nItens = Integer.parseInt(JOptionPane.showInputDialog(null, "Quantos itens existem?"));
@@ -14,8 +14,8 @@ public class Main {
 		
 //		for(int i=0; i<nItens; i++) {
 //			
-//			Item item = new Item(Integer.parseInt(JOptionPane.showInputDialog(null, "PESO do "+ (i+1) +"º Item")),
-//								Integer.parseInt(JOptionPane.showInputDialog(null, "VALOR do "+ (i+1) +"º Item")));
+//			Item item = new Item(Double.parseDouble(JOptionPane.showInputDialog(null, "PESO do "+ (i+1) +"º Item")),
+//									Double.parseDouble(JOptionPane.showInputDialog(null, "VALOR do "+ (i+1) +"º Item")));
 //			
 //			itens[i] = item;
 //			
@@ -33,7 +33,7 @@ public class Main {
 		itens[3] = item4;
 		itens[4] = item5;
 		
-//		capMochila = Integer.parseInt(JOptionPane.showInputDialog(null, "Qual a capacidade da mochila"));
+//		capMochila = Double.parseDouble(JOptionPane.showInputDialog(null, "Qual a capacidade da mochila"));
 		
 		capMochila = 15;
 		
@@ -42,6 +42,8 @@ public class Main {
 		ag.primeiraPopulacao(nItens);
 		
 		ag.fitness(itens, capMochila, nItens);
+		
+		ag.selecao();
 		
 		ag.mostraResultado(itens, nItens);
 

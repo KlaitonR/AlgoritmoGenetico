@@ -3,8 +3,11 @@ package main;
 public class Individuo {
 
 	int cromossomos [];
-	int beneficio;
-	int peso;
+	double beneficio;
+	double peso;
+	double propSelecao;
+	double parcelaDaRoleta;
+	boolean selecionado;
 	
 	public Individuo(int qtitens) {
 		
