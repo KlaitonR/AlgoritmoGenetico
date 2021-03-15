@@ -9,7 +9,8 @@ public class AlgoritmoGenetico {
 	Populacao populacao = new Populacao(nPopulacao);
 	Random roleta = new Random();
 	int penalidade = -50;
-	int selecionados = 0;
+	int nSelecionados = 0;
+	double nPopulacaoSelecao;
 	
 	public void primeiraPopulacao(int nItens) {
 		
@@ -60,52 +61,56 @@ public class AlgoritmoGenetico {
 		
 		System.out.println("\nFitness total: " + fitnessTotal + "\n"); 
 		
-		for(int i=0; i<nPopulacao; i++) { //Calculando porcentagem
+		for(int i=0; i<nPopulacao; i++) { //Calculando probabilidade de ser selecionado
 			populacao.individuos[i].propSelecao = (populacao.individuos[i].beneficio/fitnessTotal) * 100;
 			
 		}
 		
-		double somaDaRoleta = 0;
-		
-		for(int i=0; i<nPopulacao; i++) { //Definindo os espaços da Roleta para cada individuo
-			somaDaRoleta += populacao.individuos[i].propSelecao;
-			populacao.individuos[i].parcelaDaRoleta = somaDaRoleta;  
-		}
-		
-		double nPop = nPopulacao;
+		nPopulacaoSelecao = nPopulacao;
 		
 		if((nPopulacao%2) != 0) {
-			nPop -= 1;
+			nPopulacaoSelecao -= 1;
 		}
 		
-		for(int i=0; i<nPop/2; i++) {
-			if(selecionados < nPop/2)
-				rodarRoleta();
+		System.out.println("\nNúmero de individuos que serão selecionados: "+nPopulacaoSelecao/2+"\n");
+		
+		while(nSelecionados < nPopulacaoSelecao/2) {
+			rodarRoleta();
 		}
+		
 	}
 	
 	public void rodarRoleta() {
 		
 	double sorteio = roleta.nextDouble()*100;
-	boolean selecionado = false;
 	int i = 0;
 	double faixaAnterior = 0;
 	double faixaAtual = 0;
 	System.out.println("Número sorteado: " + sorteio + "\n");
 		
-		while(!selecionado){ 
+		while(i < nPopulacao){ 
 			
-			faixaAtual += populacao.individuos[i].parcelaDaRoleta;
-			
-			if(sorteio >= faixaAnterior && 
-					sorteio < faixaAtual && !populacao.individuos[i].selecionado) {
-				populacao.individuos[i].selecionado = true;
-				selecionado = true;
-				selecionados++;
+			if(populacao.individuos[i].propSelecao > 0) { //Se a porcentagem é 0, não tem espaço na roleta e apenas pula a vez
+				
+				faixaAtual += populacao.individuos[i].propSelecao; //Defina o epaço do individuo na roleta
+				System.out.println("Faixa do individuo " +(i+1)+ " - De " + faixaAnterior);
+				
+				if(sorteio >= faixaAnterior && 
+						sorteio < faixaAtual && 
+						!populacao.individuos[i].selecionado) {
+					populacao.individuos[i].selecionado = true;
+					nSelecionados++;
+				}
+				
+				faixaAnterior += populacao.individuos[i].propSelecao; //Defina os epaços do individuo na roleta
+				
+				System.out.println("até " + faixaAtual + "\n");
+				
+				i++;
+			}else {
+				i++;
 			}
 			
-			faixaAnterior += populacao.individuos[i].parcelaDaRoleta;
-			i++;
 		}
 		
 	}
@@ -127,7 +132,7 @@ public class AlgoritmoGenetico {
 			System.out.println("Individuo " + (i+1)); 
 			Cromossomo = "";
 			if(populacao.individuos[i].selecionado)
-				selecionados += i + "  ";
+				selecionados += (i+1) + "  ";
 			
 			for(int j=0; j<nItens; j++) { 
 				Cromossomo += populacao.individuos[i].cromossomos[j] + " ";
